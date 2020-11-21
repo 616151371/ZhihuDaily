@@ -1,4 +1,4 @@
-import 'package:zhihu_daily/zhihu_news_entity.dart';
+import 'package:zhihu_daily/entities/zhihu_news_entity.dart';
 
 zhihuNewsEntityFromJson(ZhihuNewsEntity data, Map<String, dynamic> json) {
 	if (json['date'] != null) {
