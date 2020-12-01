@@ -4,6 +4,7 @@ import 'package:zhihu_daily/entities/zhihu_news_entity.dart';
 import 'dart:convert';
 import 'package:flutter_swiper/flutter_swiper.dart';
 import 'package:zhihu_daily/utils/dace_util.dart';
+import 'package:zhihu_daily/views/zhi_hu_swiper_pagination.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({Key key, this.title}) : super(key: key);
@@ -77,12 +78,53 @@ class _HomePageState extends State<HomePage> {
         child: Swiper(
             itemCount: _headerList.length,
             itemHeight: MediaQuery.of(context).size.width,
-            pagination: new SwiperPagination(),
-            control: new SwiperControl(),
+            pagination: ZhiHuSwiperPagination(),
             itemBuilder: (context, index) {
-              ZhihuNewsTopStory story = _headerList[index];
-              return Image.network(story.image);
+              return _getSwiperItem(index);
             }));
+  }
+
+  Widget _getSwiperItem(int index) {
+    ZhihuNewsTopStory story = _headerList[index];
+    String colorStr = story.imageHue;
+    String endColorStr = colorStr;
+    String startColorStr = "0xff" + colorStr.substring(2);
+    Color endColor = Color(int.parse(endColorStr));
+    Color startColor = Color(int.parse(startColorStr));
+    return Stack(
+        alignment: Alignment.bottomCenter,
+        fit: StackFit.expand,
+        children: [
+          Image.network(story.image),
+          Positioned(
+              right: 0,
+              left: 0,
+              bottom: 0,
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.bottomCenter,
+                        end: Alignment.topCenter,
+                        colors: [startColor, endColor],
+                        stops: [0.6, 1.0])),
+              )),
+          Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                    child: Text(story.title,
+                        maxLines: null,
+                        style: TextStyle(fontWeight:FontWeight.w400,fontSize: 25, color: Colors.white))),
+                Padding(
+                    padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
+                    child:
+                    Text(story.hint, style: TextStyle(color: Colors.white60)))
+              ])
+        ]);
   }
 
   Widget _getItem(int index) {
@@ -101,8 +143,10 @@ class _HomePageState extends State<HomePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(story.title,
-                style: TextStyle(color: Colors.black, fontSize: 16)),
+            Padding(
+                padding: EdgeInsets.only(right: 10),
+                child: Text(story.title,
+                    style: TextStyle(color: Colors.black, fontSize: 16))),
             Container(
               padding: EdgeInsets.only(top: 10),
               child: Text(
