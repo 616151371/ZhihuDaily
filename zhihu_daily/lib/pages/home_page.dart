@@ -10,7 +10,7 @@ import 'package:toast/toast.dart';
 import 'package:date_format/date_format.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key, this.title}) : super(key: key);
+  HomePage({Key key, @required this.title}) : super(key: key);
 
   final String title;
 
@@ -56,8 +56,7 @@ class _HomePageState extends State<HomePage> {
             IconButton(
                 icon: CircleAvatar(
                     backgroundImage: AssetImage("images/account_avatar.png")),
-                onPressed: () {
-                })
+                onPressed: () {})
           ],
         ),
         body: SmartRefresher(
@@ -111,43 +110,47 @@ class _HomePageState extends State<HomePage> {
     String startColorStr = "0xff" + colorStr.substring(2);
     Color endColor = Color(int.parse(endColorStr));
     Color startColor = Color(int.parse(startColorStr));
-    return Stack(
-        alignment: Alignment.bottomCenter,
-        fit: StackFit.expand,
-        children: [
-          Image.network(story.image),
-          Positioned(
-              right: 0,
-              left: 0,
-              bottom: 0,
-              child: Container(
-                height: 150,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.bottomCenter,
-                        end: Alignment.topCenter,
-                        colors: [startColor, endColor],
-                        stops: [0.6, 1.0])),
-              )),
-          Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
-                    child: Text(story.title,
-                        maxLines: null,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w400,
-                            fontSize: 25,
-                            color: Colors.white))),
-                Padding(
-                    padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
-                    child: Text(story.hint,
-                        style: TextStyle(color: Colors.white60)))
-              ])
-        ]);
+    return GestureDetector(
+        child: Stack(
+            alignment: Alignment.bottomCenter,
+            fit: StackFit.expand,
+            children: [
+              Image.network(story.image),
+              Positioned(
+                  right: 0,
+                  left: 0,
+                  bottom: 0,
+                  child: Container(
+                    height: 150,
+                    decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                            begin: Alignment.bottomCenter,
+                            end: Alignment.topCenter,
+                            colors: [startColor, endColor],
+                            stops: [0.6, 1.0])),
+                  )),
+              Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 10),
+                        child: Text(story.title,
+                            maxLines: null,
+                            style: TextStyle(
+                                fontWeight: FontWeight.w400,
+                                fontSize: 25,
+                                color: Colors.white))),
+                    Padding(
+                        padding: EdgeInsets.fromLTRB(20, 0, 20, 30),
+                        child: Text(story.hint,
+                            style: TextStyle(color: Colors.white60)))
+                  ])
+            ]),
+        onTap: () {
+          Navigator.pushNamed(context, "news_detail_page", arguments: story);
+        });
   }
 
   Widget _getItem(int index) {
@@ -168,35 +171,40 @@ class _HomePageState extends State<HomePage> {
           ]));
     }
     Size size = MediaQuery.of(context).size;
-    return Container(
-      width: size.width,
-      height: size.width / 5.0 + 30,
-      padding: EdgeInsets.all(10.0),
-      child: Row(children: [
-        Expanded(
-            child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-                padding: EdgeInsets.only(right: 10),
-                child: Text(story.title,
-                    style: TextStyle(color: Colors.black, fontSize: 16))),
-            Container(
-              padding: EdgeInsets.only(top: 10),
-              child: Text(
-                story.hint,
-                style: TextStyle(color: Colors.grey[600], fontSize: 12),
-              ),
-            )
-          ],
-        )),
-        Image.network(
-          story.images[0],
-          width: size.width / 5.0,
-          height: size.width / 5.0,
-        )
-      ]),
+    return GestureDetector(
+      child: Container(
+        width: size.width,
+        height: size.width / 5.0 + 30,
+        padding: EdgeInsets.all(10.0),
+        child: Row(children: [
+          Expanded(
+              child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Padding(
+                  padding: EdgeInsets.only(right: 10),
+                  child: Text(story.title,
+                      style: TextStyle(color: Colors.black, fontSize: 16))),
+              Container(
+                padding: EdgeInsets.only(top: 10),
+                child: Text(
+                  story.hint,
+                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                ),
+              )
+            ],
+          )),
+          Image.network(
+            story.images[0],
+            width: size.width / 5.0,
+            height: size.width / 5.0,
+          )
+        ]),
+      ),
+      onTap: () {
+        Navigator.pushNamed(context, "news_detail_page", arguments: story);
+      },
     );
   }
 
